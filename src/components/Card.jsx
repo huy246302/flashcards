@@ -9,13 +9,14 @@ function Card({ card, flipCard, isFlipped }) {
           hover:bg-indigo-50
           hover:shadow-md
           transition-all duration-200
-        "    onClick={flipCard}
+        "    
+      onClick={flipCard}
     >
       <div>
-        {isFlipped ? card.answer : card.question}
+        {isFlipped ? 'Answer' : 'Question'}
       </div>
       <div>
-        {isFlipped ? '(Click to see question)' : '(Click to see answer)'}
+        {isFlipped ? card.answer : card.question}
       </div>
     </div>
   );
