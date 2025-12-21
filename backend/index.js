@@ -1,34 +1,53 @@
-import express from 'express'
-import cors from 'cors'
+import express, { json } from 'express';
+import { readFileSync, writeFileSync } from 'fs';
+import cors from 'cors';
 
-const app = express()
-app.use(cors())
-app.use(express.json())
+const app = express();
+const PORT = 3001;
 
-let cards = []
+app.use(cors());
+app.use(json());
 
+const DATA_FILE = './cards.json';
+
+// helper function
+function readCards() {
+  const data = readFileSync(DATA_FILE, 'utf-8');
+  return JSON.parse(data);
+}
+
+function writeCards(cards) {
+  writeFileSync(DATA_FILE, JSON.stringify(cards, null, 2));
+}
+
+// GET all cards
 app.get('/cards', (req, res) => {
-  res.json(cards)
-})
+  const cards = readCards();
+  res.json(cards);
+});
 
+// POST new card
 app.post('/cards', (req, res) => {
-  const { question, answer } = req.body
+  const { question, answer } = req.body;
 
   if (!question || !answer) {
-    return res.status(400).json({ message: 'Missing question or answer' })
+    return res.status(400).json({ error: 'Missing data' });
   }
+
+  const cards = readCards();
 
   const newCard = {
     id: Date.now(),
     question,
-    answer,
-    createdAt: new Date().toISOString(),
-  }
+    answer
+  };
 
-  cards.push(newCard)
-  res.status(201).json(newCard)
-})
+  cards.push(newCard);
+  writeCards(cards);
 
-app.listen(3001, () => {
-  console.log('Backend running on http://localhost:3001')
-})
+  res.status(201).json(newCard);
+});
+
+app.listen(PORT, () => {
+  console.log(`Backend running at http://localhost:${PORT}`);
+});

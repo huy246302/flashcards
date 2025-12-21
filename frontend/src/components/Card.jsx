@@ -2,20 +2,25 @@ import React from 'react';
 
 function Card({ card, flipCard, isFlipped }) {
   return (
-    <div 
-      className="
-          border border-indigo-100
-          p-4 mb-3 cursor-pointer rounded
-          hover:bg-indigo-50
-          hover:shadow-md
-          transition-all duration-200
-        "    
+    <div
       onClick={flipCard}
+      className="
+        bg-white
+        border border-gray-200
+        rounded-lg
+        p-4
+        mb-4
+        cursor-pointer
+        shadow-sm
+        hover:shadow-md
+        transition
+      "
     >
-      <div>
+      <div className="text-sm text-gray-500 mb-1">
         {isFlipped ? 'Answer' : 'Question'}
       </div>
-      <div>
+
+      <div className="text-lg font-medium">
         {isFlipped ? card.answer : card.question}
       </div>
     </div>
